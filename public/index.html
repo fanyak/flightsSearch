@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<head>
+    <title>Puppetter Flights</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width initial-scale=1">
+    <style>
+        label {
+            display:block;
+            padding: 10px;          
+        } 
+        label span {
+            display: inline-block;
+            width: 80px;
+            font-weight:bold;
+        }
+        label input {
+            width: 200px;
+            height: 30px;
+            border: solid 1px #ddd;
+            border-radius: 3px;
+        }
+        form button[type="submit"] {
+            margin-left: 300px;
+            padding: 10px;
+            font-size: 17px;
+            background-color:cadetblue;
+            color: white;
+            border: solid 1px transparent;
+            border-radius: 3px;
+            cursor: pointer;
+            text-transform: capitalize;
+            
+        }        
+    </style>
+</head>
+<body>
+    <h2>Search for Flights</h2>
+    <form name="search">
+        <label><span>From:</span><input type="text" name="from" required></label>
+        <label><span>To:</span><input type="text" name="to" required></label>
+        <div>
+            <button type="submit">search</button>
+        </div>
+    </form>
+    <script>
+        const form = document.querySelector('form[name="search"]');
+        console.log(form)
+        const btn = document.querySelector('form button[type="submit"]');
+        btn.addEventListener('click', (evt)=> {
+            evt.preventDefault();
+            const formData = new FormData(form)
+            const entries = Array.from(formData.entries()).reduce((acc,cur)=> {
+                const [label, value] = cur;
+                acc[label]= value;
+                return acc;
+            },{})
+            console.log(entries);
+            const options = {
+                method: 'GET',
+                headers: {
+
+                }
+            };
+            const url = '/api/flights/';
+            fetch(url, options)
+            .then((res) =>res.json())
+            .then(console.log);
+
+        },true);
+    </script>
+</body>
