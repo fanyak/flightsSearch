@@ -6,7 +6,8 @@ import fs from 'fs';
 const router = express.Router();
 
 router.route('/')
-  .get(async (req, res) => {
+  .post(async (req, res) => {
+    console.log(req.body);
     let count = 0;
     const result = [];
     const browser = await puppeteer.launch({ headless: false });
@@ -33,13 +34,14 @@ router.route('/')
         .then((_) => {
           const textSelectorFrom = 'div[role="search"] input[type="text"][role="combobox"][value]';
           const textSelectorTo = 'div[role="search"] input[type="text"][role="combobox"][placeholder]';
+          const { from, to } = req.body;
           // REF: https://pptr.dev/#?product=Puppeteer&version=v9.1.1&show=api-class-page
           return Promise.all([
             page.mainFrame().waitForSelector(textSelectorFrom),
             page.mainFrame().waitForSelector(textSelectorTo),
-          ]).then((_) => page.type(textSelectorFrom, 'Thessaloniki'))
+          ]).then((_) => page.type(textSelectorFrom, from))
             .then((_) => page.keyboard.press('Tab'))
-            .then((_) => page.type(textSelectorTo, 'Austin, Texas'))
+            .then((_) => page.type(textSelectorTo, to))
             .then((_) => page.keyboard.press('Tab'));
         })
         .then(async (_) => {

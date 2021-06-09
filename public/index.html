@@ -18,6 +18,7 @@
             height: 30px;
             border: solid 1px #ddd;
             border-radius: 3px;
+            text-transform: capitalize;
         }
         form button[type="submit"] {
             margin-left: 300px;
@@ -42,10 +43,19 @@
             <button type="submit">search</button>
         </div>
     </form>
+    <p></p>
+    <table hidden>
+        <thead>
+            <th>Departure Date</th>
+            <th>Return Date</th>
+            <th>Price</th>
+        </thead>
+    </table>
     <script>
         const form = document.querySelector('form[name="search"]');
-        console.log(form)
         const btn = document.querySelector('form button[type="submit"]');
+        const table = document.querySelector('table');
+
         btn.addEventListener('click', (evt)=> {
             evt.preventDefault();
             const formData = new FormData(form)
@@ -56,15 +66,32 @@
             },{})
             console.log(entries);
             const options = {
-                method: 'GET',
+                method: 'POST',
+                mode: 'same-origin', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
                 headers: {
-
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(entries)
             };
             const url = '/api/flights/';
             fetch(url, options)
             .then((res) =>res.json())
-            .then(console.log);
+            .then(res => {
+                console.log(res);
+            for(let el of res) {
+                const tr = document.createElement('TR');
+                for(let key of Object.keys(el)){
+                        const td = document.createElement('TD')
+                        const node = document.createTextNode(el[key])
+                        td.appendChild(node);
+                        tr.appendChild(td)
+                    }
+                    table.appendChild(tr)
+                }
+                table.removeAttribute('hidden');            
+            });
 
         },true);
     </script>
