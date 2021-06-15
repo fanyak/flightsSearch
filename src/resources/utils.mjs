@@ -1,4 +1,5 @@
 const G_CONSENT_URL = 'https://consent.google.com';
+
 export const cookiesConsentRedirect = (url) => Promise.resolve({
   then: function (onFulfill, onReject) {
     if (url.match(new RegExp(`${G_CONSENT_URL}`, 'i'))) {

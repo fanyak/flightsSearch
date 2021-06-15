@@ -30,6 +30,14 @@ app.use('/api/flights/', express.json(), flightsRouter);
 
 app.use((req, res) => res.sendFile(`${WEB_PATH}/index.html`));
 
-app.listen(port, () => {
-  console.log('app listening on port 3000');
-});
+(async () => {
+  try {
+    await
+
+    app.listen(port, () => {
+      console.log('app listening on port 3000');
+    });
+  } catch (er) {
+    console.log(er);
+  }
+})();
